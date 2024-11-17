@@ -4,37 +4,37 @@ class base
 {
 
 private:
-    int motorPin1;
-    int motorPin2;
-    int pwmPin;
+    int motor_pin1;
+    int motor_pin2;
+    int pwm_pin;
 
 public:
     base(int pin1, int pin2, int pwm)
     {
-        motorPin1 = pin1;
-        motorPin2 = pin2;
-        pwmPin = pwm;
+        motor_pin1 = pin1;
+        motor_pin2 = pin2;
+        pwm_pin = pwm;
 
         // Set the motor pins as outputs
-        pinMode(motorPin1, OUTPUT);
-        pinMode(motorPin2, OUTPUT);
-        pinMode(pwmPin, OUTPUT);
+        pinMode(motor_pin1, OUTPUT);
+        pinMode(motor_pin2, OUTPUT);
+        pinMode(pwm_pin, OUTPUT);
     }
 
     void rotateClockwise(int speed) {
-        digitalWrite(motorPin1, HIGH);
-        digitalWrite(motorPin2, LOW);
-        analogWrite(pwmPin, speed);  // Speed control (0 to 255)
+        digitalWrite(motor_pin1, HIGH);
+        digitalWrite(motor_pin2, LOW);
+        analogWrite(pwm_pin, speed);  // Speed control (0 to 255)
     }
 
     void rotateCounterClockwise(int speed) {
-        digitalWrite(motorPin1, LOW);
-        digitalWrite(motorPin2, HIGH);
-        analogWrite(pwmPin, speed);  // Speed control (0 to 255)
+        digitalWrite(motor_pin1, LOW);
+        digitalWrite(motor_pin2, HIGH);
+        analogWrite(pwm_pin, speed);  // Speed control (0 to 255)
     }
 
     void stop() {
-        analogWrite(pwmPin, 0);  // Stop the motor
+        analogWrite(pwm_pin, 0);  // Stop the motor
     }
 
 
