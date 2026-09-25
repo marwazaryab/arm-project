@@ -2,41 +2,55 @@
 
 class base
 {
-
 private:
-    int motor_pin1;
-    int motor_pin2;
-    int pwm_pin;
+    int step_pin;
+    int dir_pin;
+
+    long current_steps;
+    float steps_per_degree;
 
 public:
-    base(int pin1, int pin2, int pwm)
+    base(int stepPin, int dirPin, float stepsPerDegree)
     {
-        motor_pin1 = pin1;
-        motor_pin2 = pin2;
-        pwm_pin = pwm;
+        step_pin = stepPin;
+        dir_pin = dirPin;
+        steps_per_degree = stepsPerDegree;
+        current_steps = 0;
 
-        // Set the motor pins as outputs
-        pinMode(motor_pin1, OUTPUT);
-        pinMode(motor_pin2, OUTPUT);
-        pinMode(pwm_pin, OUTPUT);
+        pinMode(step_pin, OUTPUT);
+        pinMode(dir_pin, OUTPUT);
     }
 
-    void rotateClockwise(int speed) {
-        digitalWrite(motor_pin1, HIGH);
-        digitalWrite(motor_pin2, LOW);
-        analogWrite(pwm_pin, speed);  // Speed control (0 to 255)
+    void setAngle(float angle)
+    {
+        long target_steps = angle * steps_per_degree;
+        long difference = target_steps - current_steps;
+
+        if (difference >= 0)
+            digitalWrite(dir_pin, HIGH);
+        else
+            digitalWrite(dir_pin, LOW);
+
+        long steps = abs(difference);
+
+        for (long i = 0; i < steps; i++)
+        {
+            digitalWrite(step_pin, HIGH);
+            delayMicroseconds(800);
+            digitalWrite(step_pin, LOW);
+            delayMicroseconds(800);
+        }
+
+        current_steps = target_steps;
     }
 
-    void rotateCounterClockwise(int speed) {
-        digitalWrite(motor_pin1, LOW);
-        digitalWrite(motor_pin2, HIGH);
-        analogWrite(pwm_pin, speed);  // Speed control (0 to 255)
+    void zero()
+    {
+        current_steps = 0;
     }
 
-    void stop() {
-        analogWrite(pwm_pin, 0);  // Stop the motor
+    float getAngle()
+    {
+        return current_steps / steps_per_degree;
     }
-
-
 };
-
